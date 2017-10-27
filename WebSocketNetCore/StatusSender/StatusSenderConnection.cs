@@ -15,26 +15,23 @@ namespace WebSocketNetCore.StatusSender
 
         public override async Task ReceiveAsync(string message)
         {
-            var receiveMessage = JsonConvert.DeserializeObject<ReceiveMessage>(message);
 
             //aca se pueden definir los receptores, por ahora todos
             var receivers = Handler.Connections.ToList();
 
-            if (receivers.Count > 0)
+            receivers.ForEach(async (websocketConnection) =>
             {
-                receivers.ForEach(async (websocketConnection) =>
+                var sendMessage = new SendMessage
                 {
-                    var sendMessage = JsonConvert.SerializeObject(new SendMessage
-                    {
-                        Sender = "Server",
-                        Message = receiveMessage.Message
-                    });
+                    Sender = "Server",
+                    Message = message
+                };
 
-                    await websocketConnection.SendMessageAsync(sendMessage);
+                await websocketConnection.SendMessageAsync(sendMessage.ToString());
 
-                });
-            }
+            });
         }
+
 
         private class ReceiveMessage
         {

@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using WebSocketNetCore.StatusSender;
 
 namespace WebSocketNetCore.WebSocketManager
 {
+    //Crea los metodos necesarios para agregar el servicio al app
     public static class Extensions
     {
         public static IApplicationBuilder MapWebSocketManager(this IApplicationBuilder app, PathString path, WebSocketHandler handler)
@@ -23,9 +25,7 @@ namespace WebSocketNetCore.WebSocketManager
             foreach (var type in Assembly.GetEntryAssembly().ExportedTypes)
             {
                 if (type.GetTypeInfo().BaseType == handlerBaseType)
-                {
                     services.AddSingleton(type);
-                }
             }
             
             return services;
