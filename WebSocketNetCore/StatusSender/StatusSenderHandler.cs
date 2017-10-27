@@ -15,9 +15,9 @@ namespace WebSocketNetCore.StatusSender
 
         protected bool WatcherIsRuning = false;
 
+        //es la puerta de entrada de cuanquier conexion nueva
         public override async Task<WebSocketConnection> OnConnected(HttpContext context)
         {
-            
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
             var senderClient = new StatusSenderConnection(this)
@@ -33,6 +33,7 @@ namespace WebSocketNetCore.StatusSender
             return senderClient;
         }
 
+        //metodo para revisar una carpeta
         private void StartFileSystemWatcher()
         {
             var watcher = new FileSystemWatcher();
